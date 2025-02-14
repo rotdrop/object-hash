@@ -305,6 +305,14 @@ describe('hash', function() {
     assert.equal(ha, hb, 'Hashing should ignore key `b`');
   });
 
+  it('exclude works', function() {
+    var ha, hb;
+    ha = hash({a: 1, b: undefined, c: undefined}, { exclude: function(key, value) { return key === 'b' && value === undefined } });
+    hb = hash({a: 1, c: undefined});
+
+    assert.equal(ha, hb, 'Hashing should ignore key/value `b: undefined`');
+  });
+
   if (typeof Set !== 'undefined') {
     it('unorderedSets = false', function() {
       var opt = { unorderedSets: false };

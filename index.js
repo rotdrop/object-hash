@@ -77,6 +77,7 @@ function applyDefaults(object, sourceOptions){
   options.unorderedObjects = sourceOptions.unorderedObjects === false ? false : true; // default to true
   options.replacer = sourceOptions.replacer || undefined;
   options.excludeKeys = sourceOptions.excludeKeys || undefined;
+  options.exclude = sourceOptions.exclude || undefined;
 
   if(typeof object === 'undefined') {
     throw new Error('Object argument required.');
@@ -240,6 +241,10 @@ function typeHasher(options, writeTo, context){
 
         if (options.excludeKeys) {
           keys = keys.filter(function(key) { return !options.excludeKeys(key); });
+        }
+
+        if (options.exclude) {
+          keys = keys.filter(function(key) { return !options.exclude(key, object[key]); });
         }
 
         write('object:' + keys.length + ':');

@@ -176,6 +176,7 @@ function typeHasher(options, writeTo, context){
   };
 
   return {
+    level: -1,
     dispatch: function(value){
       if (options.replacer) {
         value = options.replacer(value);
@@ -188,7 +189,10 @@ function typeHasher(options, writeTo, context){
 
       //console.log("[DEBUG] Dispatch: ", value, "->", type, " -> ", "_" + type);
 
-      return this['_' + type](value);
+      ++this.level;
+      var result = this['_' + type](value);
+      --this.level;
+      return result;
     },
     _object: function(object) {
       var pattern = (/\[object (.*)\]/i);
@@ -244,7 +248,8 @@ function typeHasher(options, writeTo, context){
         }
 
         if (options.exclude) {
-          keys = keys.filter(function(key) { return !options.exclude(key, object[key]); });
+          var level = this.level;
+          keys = keys.filter(function(key) { return !options.exclude(key, object[key], level); });
         }
 
         write('object:' + keys.length + ':');

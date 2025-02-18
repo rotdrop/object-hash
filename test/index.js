@@ -313,6 +313,14 @@ describe('hash', function() {
     assert.equal(ha, hb, 'Hashing should ignore key/value `b: undefined`');
   });
 
+  it('exclude by level works', function() {
+    var ha, hb;
+    ha = hash({a: 1, b: { c: 1, d: { c: 2 }}}, { algorithm: 'passthrough', exclude: function(key, value, level) { return key === 'c' && level === 1 } });
+    hb = hash({a: 1, b: { d: { c: 2 }}}, { algorithm: 'passthrough' });
+
+    assert.equal(ha, hb, 'Hashing should ignore properties of nested object `b: { c: 1 }');
+  });
+
   if (typeof Set !== 'undefined') {
     it('unorderedSets = false', function() {
       var opt = { unorderedSets: false };

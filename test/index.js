@@ -321,6 +321,14 @@ describe('hash', function() {
     assert.equal(ha, hb, 'Hashing should ignore properties of nested object `b: { c: 1 }');
   });
 
+  it('check sha256', function() {
+    var ha, hb;
+    ha = hash({}, { algorithm: 'sha256' });
+    hb = '89f54475c1b4341195658d61b2b1baa04b2230b6bba73b44c5e6ec5c9f91c7e0';
+
+    assert.equal(ha, hb, 'Hashing empty object with sha256 should yield ' + hb);
+  });
+
   if (typeof Set !== 'undefined') {
     it('unorderedSets = false', function() {
       var opt = { unorderedSets: false };
